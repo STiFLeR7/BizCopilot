@@ -1,34 +1,36 @@
 # ARCHITECTURE: BizCopilot
 
 ## 📐 System Overview
-BizCopilot uses a **Modular Monolith** architecture. The core logic is centralized in the FastAPI backend, which orchestrates specialized agents and data execution environments.
+BizCopilot V1 uses a **Cloud-Native Mirror** architecture. It leverages Docker Compose to host services locally that are architecturally aligned with Google Cloud Platform (GCP).
 
 ## 🧩 Logical Components
 
-### 1. API Gateway (FastAPI)
-- Handles Request/Response lifecycle.
-- Manages file uploads (CSV/XLSX).
-- Handles user authentication and JWT sessions.
+### 1. Backend (FastAPI + Google ADK)
+- **Orchestrator:** Coordinates agents using **Google ADK**.
+- **LLM:** Powered by `gemini-2.5-pro`.
+- **Identity:** Manages user sessions and connection strings to existing DBs.
 
-### 2. The AI Orchestrator (LangGraph)
-Acts as the "Brain" of the system using a **Hybrid Router** pattern:
-- **Router:** Classifies the prompt (e.g., "Show me sales" vs. "Why did sales drop?").
-- **SQL Architect:** Generates PostgreSQL queries for data retrieval.
-- **Python Analyst:** Generates code for deeper statistical analysis.
-- **Narrative Synth:** Combines raw data + analysis into a human-readable summary.
+### 2. Knowledge Base (Weaviate)
+- **Vector Store:** Standalone **Weaviate** instance.
+- **RAG:** Stores embedded schema metadata to provide high-precision context to the SQL Architect.
 
-### 3. Data Execution Layer
-- **PostgreSQL Engine:** Executes generated SQL against dynamic user schemas.
-- **Python Sandbox:** An isolated environment to run analysis code (Pandas, Numpy) without risk to the host system.
+### 3. Data Layer (Existing PostgreSQL)
+- **Engine:** Connects to the user's existing PostgreSQL instance (via local bridge or PGAdmin4).
+- **Execution:** Runs audited SQL queries against the target schema.
 
-### 4. Client Layer
-- **Web App:** Dashboard view + Chat interface.
-- **Android App:** Native chat interface + push notifications for insights.
+### 4. Analytics Engine (Worker)
+- **Python Sandbox:** Isolated environment for executing analytical code (Pandas, Scipy) triggered by Google ADK.
+
+### 5. Client Layer
+- **Web App:** Dashboard view + Chat interface (Deployed on GCP/Docker).
+- **Android App:** Native chat interface + real-time dashboards.
 
 ## 🔄 High-Level Data Flow
-1. **Input:** User sends NL query via Android/Web.
-2. **Context:** System retrieves table schemas from Vector DB (RAG).
-3. **Plan:** Router decides: SQL retrieval, Python analysis, or both.
-4. **Execute:** Queries run against Postgres; results fetched.
-5. **Format:** Narrative Synth creates text summary + Chart JSON spec.
-6. **Output:** Client renders message + interactive chart.
+1. **Ingestion:** System introspects existing PostgreSQL schema and indexes metadata into **Weaviate**.
+2. **Query:** User sends NL query via Android/Web.
+3. **Reasoning:** **ADK Coordinator** retrieves schema context from Weaviate.
+4. **Generation:** **SQL Architect** generates PostgreSQL query using `gemini-2.5-pro`.
+5. **Audit:** **Verification Agent** checks SQL for security and correctness.
+6. **Execution:** Query runs against the existing DB; results fetched.
+7. **Synthesis:** **Synthesizer** creates text summary + Chart JSON spec.
+8. **Output:** Client renders insight + interactive chart.

@@ -16,7 +16,7 @@ To empower every business user with a "Personal Data Analyst" that is as reliabl
 Small to mid-sized businesses often lack dedicated data teams, and existing BI tools (PowerBI/Tableau) require significant technical expertise to set up and query. BizCopilot removes the technical barrier to entry.
 
 ## 🎯 MVP Goals
-1. Successful natural language to SQL conversion for 85%+ of standard business queries.
-2. Dynamic ingestion of CSV/Excel files into a queryable PostgreSQL environment.
+1. Successful natural language to SQL conversion for 90%+ of standard business queries (Aggregations, Joins, Time-series).
+2. Direct introspection and indexing of existing PostgreSQL database schemas.
 3. Interactive chart generation (Bar, Line, Pie) based on data results.
 4. Functional Android and Web clients for unified access.

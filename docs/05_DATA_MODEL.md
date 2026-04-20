@@ -1,28 +1,27 @@
 # DATA_MODEL: BizCopilot
 
-## 🗄️ PostgreSQL Schema Strategy
+## 🗄️ Database Strategy
 
-### 1. System Schema (`public`)
-Stores application-level metadata.
-- `users`: Auth credentials, roles, settings.
-- `datasets`: Metadata about uploaded files (name, owner, original filename, table name mapping).
+### 1. Application Database (PostgreSQL)
+Stores application-level metadata and system state.
+- `users`: Auth credentials, roles, and session settings.
+- `connections`: Metadata for existing PostgreSQL databases (Host, Port, DB Name, encrypted credentials).
 - `chat_sessions`: History of conversations for context retrieval.
-- `queries`: Log of NL queries and their generated SQL/Python counterparts (for debugging/fine-tuning).
+- `query_logs`: Record of NL queries, generated SQL, execution status, and insights.
 
-### 2. User Data Schema (`user_data`)
-Stores the actual business data.
-- **Dynamic Tables:** Every CSV upload is converted into a structured PostgreSQL table within this schema (e.g., `user_data.sales_2023_hill`).
-- **Isolation:** Tables are prefixed or separated to prevent cross-user data leakage.
+### 2. Knowledge Base (Weaviate)
+Stores semantic representations of the connected database schemas to enable high-precision RAG.
+- **Schema Objects:** Embedded metadata about tables, columns, and data types.
+- **Relationship Map:** Indices of foreign key relationships and common join paths.
+- **KPI Definitions:** Embedded business logic for standardized metrics.
 
-## 🧠 Vector Metadata (FAISS/Weaviate)
-Stores semantic representations of the database schema:
-- **Table Names & Descriptions:** "What does this table represent?"
-- **Column Names & Samples:** "What kind of data is in 'order_status'?"
-- **KPI Definitions:** Standard business definitions (e.g., "Churn Rate = Customers lost / Total customers").
+### 3. Business Data (Target PostgreSQL)
+The user's existing database instance (e.g., accessed via PGAdmin4).
+- BizCopilot connects as a **READ-ONLY** user.
+- Data remains in-place; only metadata is ingested for indexing.
 
-## 🔄 Ingestion Pipeline
-1. **Upload:** User sends CSV.
-2. **Inference:** System infers types (Integer, Date, Text) using Pandas/Pydantic.
-3. **Create:** `CREATE TABLE user_data.table_name (...)`
-4. **Load:** `COPY` command to bulk load data into Postgres.
-5. **Index:** Auto-generate indices on likely join/filter keys (ID, Date).
+## 🔄 Ingestion & Indexing Pipeline
+1. **Connection:** User provides credentials for an existing PostgreSQL instance.
+2. **Introspection:** System crawls the database catalog (`information_schema`) to map tables and columns.
+3. **Embedding:** Metadata is processed by `gemini-2.5-pro` and stored in **Weaviate**.
+4. **Maintenance:** Periodic re-syncing to detect schema changes (e.g., new tables/columns).

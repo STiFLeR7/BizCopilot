@@ -1,154 +1,100 @@
 # 👥 Team Division — BizCopilot
 
-This document defines the roles, responsibilities, and ownership structure for the **BizCopilot** project. Each member owns a core domain while collaborating across system boundaries to ensure seamless integration.
+This document defines the roles, responsibilities, and phase-wise ownership structure for the **BizCopilot** project, optimized for a 4-member development team.
 
 ---
 
-## 🧠 Project Overview
+## 🏗️ The Four Development Streams
 
-**BizCopilot** is an AI-powered business analytics copilot that enables users to query data using natural language, generate insights, and visualize results across web and mobile platforms.
+BizCopilot is divided into four parallel workstreams. Success depends on the **Phase 1 Foundation** being landed first to unblock the rest of the team.
 
----
+### Dev 1: Foundation + Core AI Orchestrator (Lead)
+**Owner:** Hill
+**Focus:** System Architecture, Google ADK, and the "Cloud-Native Mirror" environment.
 
-## 👤 Team Members & Responsibilities
-
-### 🔧 Hill (Backend + AI/ML Lead)
-
-**Primary Ownership:** Core System Architecture, AI Engine, Backend Services
-
-#### Responsibilities:
-- Design end-to-end system architecture
-- Develop and maintain FastAPI backend
-- Implement LLM pipelines:
-  - Natural Language → SQL generation
-  - RAG-based context retrieval
-  - Tool-calling agents
-- Build Python execution sandbox for analytics
-- Integrate vector database (FAISS / Weaviate)
-- Optimize performance, caching, and API efficiency
-- Ensure secure execution of queries and code
-
-#### Key Deliverables:
-- Backend APIs
-- AI orchestration pipelines
-- Execution engine
-- System architecture documentation
+| Phase | Task | Deliverables |
+| :--- | :--- | :--- |
+| **Phase 1** | **Project Skeleton & Docker** | `docker-compose.yml`, FastAPI boilerplate, Weaviate setup. |
+| **Phase 2** | **ADK Coordinator** | Hierarchical agent logic, Gemini 2.5 Pro integration, Intent Routing. |
+| **Phase 3** | **Verification & Sandbox** | SQL Audit Agent, Restricted Python Worker, security gates. |
+| **Phase 4** | **GCP Production Scale** | Caching (Redis), GCP deployment scripts, E2E Security. |
 
 ---
 
-### 📱 Yash (Android Frontend Developer)
+### Dev 2: Data Engineering & Schema Indexing
+**Owner:** Krish
+**Focus:** Database Connectivity, Catalog Introspection, and Weaviate RAG Indexing.
 
-**Primary Ownership:** Mobile Application (Android)
-
-#### Responsibilities:
-- Develop Android app (chat + dashboard interface)
-- Integrate backend APIs
-- Implement real-time chat UI
-- Display analytics results and visualizations
-- Handle user sessions and state management
-- Optimize UX for conversational analytics
-
-#### Key Deliverables:
-- Android application (APK / build)
-- UI/UX implementation
-- API integration layer
+| Phase | Task | Deliverables |
+| :--- | :--- | :--- |
+| **Phase 1** | **PostgreSQL Connector** | Catalog crawling logic (`information_schema`), connection pooling. |
+| **Phase 2** | **Weaviate Indexing Pipeline** | Schema embedding logic, automated metadata ingestion. |
+| **Phase 3** | **Query Optimization** | Indexing strategies for target DBs, read-only session management. |
+| **Phase 4** | **Schema Drift Management** | Automated re-indexing on schema change, metadata lifecycle. |
 
 ---
 
-### 🗄️ Krish (Data Engineer)
+### Dev 3: Analytics Logic & Insight Synthesis
+**Owner:** Kushank
+**Focus:** KPI Frameworks, Python Analysis Modules, and Narrative Synthesis.
 
-**Primary Ownership:** Database, Data Pipelines, Schema Management
-
-#### Responsibilities:
-- Design and manage PostgreSQL database schema
-- Handle database migrations using Alembic
-- Build ETL/data ingestion pipelines
-- Ensure data consistency and validation
-- Optimize database queries and indexing
-- Support analytics engine with structured data access
-
-#### Key Deliverables:
-- Database schema & ER diagrams
-- Migration scripts
-- Data ingestion pipelines
-- Query optimization strategies
+| Phase | Task | Deliverables |
+| :--- | :--- | :--- |
+| **Phase 1** | **KPI Definitions** | Standardized metric logic (Revenue, Trends, etc.) for V1. |
+| **Phase 2** | **Semantic Mapping** | Business-logic descriptions for schema elements (for RAG). |
+| **Phase 3** | **Analysis & Viz Specs** | Python modules for Pandas/Scipy, JSON spec for Charts. |
+| **Phase 4** | **Insight Validation** | Accuracy testing (90%+ goal), Narrative style fine-tuning. |
 
 ---
 
-### 📊 Kushank (Data Analyst)
+### Dev 4: Frontend & Mobile Integration
+**Owner:** Yash
+**Focus:** Android (Kotlin/Compose), Web (React), and Conversational UI.
 
-**Primary Ownership:** Analytics, Insights, Visualization Logic
-
-#### Responsibilities:
-- Define business metrics and KPIs
-- Develop analytics logic and insight generation
-- Create visualization pipelines (charts, summaries)
-- Design dashboard structures
-- Interpret query outputs into meaningful insights
-- Assist in validating analytical correctness
-
-#### Key Deliverables:
-- KPI definitions
-- Analytics modules
-- Visualization logic
-- Insight generation system
+| Phase | Task | Deliverables |
+| :--- | :--- | :--- |
+| **Phase 1** | **Client Skeleton** | Android/Web boilerplate, Auth screens, Networking layer. |
+| **Phase 2** | **Conversational UI** | Real-time chat interface, message persistence, multi-turn state. |
+| **Phase 3** | **Visualization Rendering** | Dynamic chart components (Bar, Line, Pie), Status "thought" indicators. |
+| **Phase 4** | **Dashboard & UX Polish** | Insight alerts (Push notifications), final UX refinements. |
 
 ---
 
-## 🔄 Collaboration Model
+## 🔄 Critical Coordination Points (Handoffs)
 
-### Shared Responsibilities:
-- API contract definition
-- Integration testing
-- Debugging cross-module issues
-- Documentation and reporting
-
-### Communication:
-- Daily async updates (GitHub / WhatsApp / Slack)
-- Weekly sync for architecture + progress review
+| ID | From | To | Signal | Timing |
+| :--- | :--- | :--- | :--- | :--- |
+| **C1** | **Hill (Phase 1)** | **All** | Docker & Skeleton merged. | Day 2 |
+| **C2** | **Krish (Phase 2)** | **Hill** | Schema metadata indexed in Weaviate. | Week 4 |
+| **C3** | **Kushank (Phase 3)** | **Yash** | Chart JSON Spec finalized. | Week 6 |
+| **C4** | **Hill (Phase 3)** | **Kushank** | Python Sandbox ready for test modules. | Week 5 |
 
 ---
 
-## 🧩 Workflow Ownership
+## 📅 Timeline (8-Week Sprint)
 
-| Component                  | Owner        |
-|--------------------------|-------------|
-| Backend APIs              | Hill        |
-| AI / LLM Engine           | Hill        |
-| Android App               | Yash        |
-| Database & Migrations     | Krish       |
-| Data Pipelines            | Krish       |
-| Analytics & Insights      | Kushank     |
-| Visualization Logic       | Kushank     |
-| Deployment (Docker)       | Hill (Lead) |
-| Integration Testing       | All         |
-
----
-
-## 🚀 Development Principles
-
-- Modular architecture (clear separation of concerns)
-- API-first development
-- Scalable and production-ready code
-- Clean Git practices (feature branches, PR reviews)
-- Documentation-driven development
+```mermaid
+gantt
+    title BizCopilot V1 Roadmap
+    dateFormat  YYYY-MM-DD
+    section Foundation
+    Skeleton & Docker (Hill) :a1, 2026-04-20, 10d
+    DB Connectivity (Krish) :a2, 2026-04-20, 10d
+    section AI & Data
+    ADK Coordinator (Hill) :b1, after a1, 14d
+    Weaviate Indexing (Krish) :b2, after a2, 14d
+    section Analytics & UI
+    SQL Architect (Hill) :c1, after b1, 14d
+    Analytics Modules (Kushank) :c2, after b1, 14d
+    Mobile Dashboards (Yash) :c3, after b1, 14d
+    section Scale
+    GCP Deployment (Hill) :d1, after c1, 10d
+    Polish & Audit (All) :d2, after c1, 10d
+```
 
 ---
 
 ## ⚠️ Ownership Rules
-
-- Each module has a **single owner**
-- No direct changes in another module without discussion
-- PR approval required for merges
-- Shared responsibility for final system quality
-
----
-
-## 📌 Final Note
-
-This division ensures:
-- Clear ownership
-- Faster execution
-- Scalable collaboration
-
-BizCopilot is being built not just as a project, but as a **production-grade AI system**.
+1. **Module Sovereignty:** Each stream lead has final say on their module's implementation.
+2. **API First:** Backend must provide Swagger/OpenAPI stubs before Phase 2 starts.
+3. **Fail Fast:** If introspection fails on a complex schema, Krish must flag it immediately to Hill.

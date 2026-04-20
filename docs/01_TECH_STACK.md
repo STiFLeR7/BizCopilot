@@ -2,22 +2,22 @@
 
 ## 🏗️ Core Infrastructure
 - **Backend Framework:** FastAPI (Python 3.10+)
-- **Database (Primary):** PostgreSQL 15+ (Application metadata + Dynamic user data)
-- **Database (Vector):** FAISS or Weaviate (for Schema Context & RAG)
+- **Database (Primary):** PostgreSQL 15+ (Local instance / PGAdmin4 connection)
+- **Database (Vector):** **Weaviate** (Standalone Docker Container)
 - **Cache & Memory:** Redis (Session state, rate limiting, and result caching)
 - **Containerization:** Docker & Docker Compose
 
 ## 🧠 AI & Machine Learning
-- **Orchestration:** LangGraph (Stateful multi-agent workflows)
-- **LLM Providers:** OpenAI (GPT-4o/o1) or Anthropic (Claude 3.5 Sonnet)
-- **Embeddings:** `text-embedding-3-small` (OpenAI)
-- **Execution Sandbox:** Restricted Python environment (using `multiprocessing` or Docker-in-Docker)
+- **Orchestration:** **Google ADK (Agent Development Kit)**
+- **LLM Providers:** **gemini-2.5-pro** (via Vertex AI / Gemini API)
+- **Embeddings:** Google Vertex AI Embeddings
+- **Execution Sandbox:** Restricted Python environment (for Pandas, Scipy execution)
 
 ## 🌐 Frontend (Web)
 - **Framework:** React.js (Next.js 14 App Router)
-- **Styling:** Vanilla CSS / Tailwind CSS (as per user preference, defaulting to Vanilla-like modular CSS)
+- **Styling:** Vanilla CSS
 - **Charts:** Recharts or D3.js
-- **Deployment:** Vercel
+- **Deployment:** **GCP (Docker-based)**
 
 ## 📱 Mobile (Android)
 - **Language:** Kotlin
@@ -26,6 +26,6 @@
 - **UI:** Jetpack Compose (Modern, reactive UI)
 
 ## 🔄 DevOps & CI/CD
-- **Hosting:** Render (Backend), Vercel (Frontend)
+- **Hosting:** **GCP (Docker-based)** with "Cloud-Native Mirror" approach
 - **CI:** GitHub Actions
-- **Logging:** Sentry / Loguru
+- **Logging:** Google Cloud Logging / Sentry

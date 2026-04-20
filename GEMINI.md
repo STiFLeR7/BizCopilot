@@ -2,14 +2,14 @@
 
 This file defines how Gemini CLI should behave when working on the **BizCopilot** repository.
 
-BizCopilot is a **production-grade AI-powered business analytics copilot** with backend, data, analytics, and mobile components.
+BizCopilot is a **production-grade AI-powered business analytics copilot** with backend, data, analytics, and mobile components. V1 focus is on existing PostgreSQL databases using **Google ADK** and **Gemini 2.5 Pro**.
 
 ---
 
 ## 🧠 Project Overview
 
 **BizCopilot** enables users to:
-- Upload datasets (CSV) or connect databases (PostgreSQL).
+- Connect existing databases (PostgreSQL).
 - Ask natural language questions about their data.
 - Receive SQL queries, Python-based insights, and interactive visualizations.
 - Access insights via Web (React) and Mobile (Android).
@@ -22,19 +22,19 @@ BizCopilot is a **production-grade AI-powered business analytics copilot** with 
 |-----------|-------|------|
 | **Core AI & Backend** | **Hill** | Backend + AI/ML Lead |
 | **Mobile App** | **Yash** | Android Frontend Developer |
-| **Data & ETL** | **Krish** | Data Engineer |
+| **Data & Connectivity** | **Krish** | Data Engineer |
 | **Analytics & Viz** | **Kushank** | Data Analyst |
 
 ---
 
 ## 🧩 Repository Structure
 
-- `/backend` → FastAPI, LLM pipelines (LangGraph), Vector DB (FAISS/Weaviate), Redis.
-- `/data` → PostgreSQL schema, Alembic migrations, ETL pipelines.
+- `/backend` → FastAPI, LLM pipelines (**Google ADK**), Vector DB (**Weaviate**), Redis.
+- `/data` → PostgreSQL connectivity, schema introspection, metadata management.
 - `/analytics` → Python-based analytics logic, KPI frameworks, visualization pipelines.
-- `/android` → Android app (MVVM, Kotlin/Java), chat interface, dashboards.
+- `/android` → Android app (MVVM, Kotlin), chat interface, dashboards.
 - `/frontend` → Web app (React), Vercel deployment.
-- `/infra` → Docker configs, deployment scripts (Render/Vercel).
+- `/infra` → **Docker Compose** (Cloud-Native Mirror), GCP deployment scripts.
 - `/docs` → SoW, Team Division, Architecture, API contracts.
 
 ---
@@ -43,7 +43,7 @@ BizCopilot is a **production-grade AI-powered business analytics copilot** with 
 
 ### 1. Think Production, Not Prototype
 - Write scalable, modular, clean code.
-- Avoid shortcuts, hacks, or hardcoding.
+- Follow "Option B: Cloud-Native Mirror" (Docker-based development).
 - Follow best practices for each layer (MVVM for Android, REST for API).
 
 ### 2. Respect Module Boundaries
@@ -54,7 +54,7 @@ BizCopilot is a **production-grade AI-powered business analytics copilot** with 
 ### 3. Follow Existing Patterns
 - Match coding style already present.
 - Reuse utilities instead of duplicating logic.
-- Use `Alembic` for all data schema changes.
+- Standardize on **Google ADK** for all agentic workflows.
 
 ### 4. Always Explain Before Major Changes
 Before:
@@ -72,13 +72,13 @@ Gemini should adapt based on which folder it is working in and who the owner is:
 
 ### 🔧 `/backend` (Owner: **Hill**)
 Act like a **Senior Backend + GenAI Engineer**.
-- **Focus:** FastAPI, LangGraph orchestration, RAG, tool-calling, Python sandbox.
-- **Rules:** Validate all generated SQL; ensure secure code execution in the sandbox.
+- **Focus:** FastAPI, **Google ADK** orchestration, RAG via **Weaviate**, tool-calling, Python sandbox.
+- **Rules:** Validate all generated SQL; ensure secure code execution in the sandbox. Use **gemini-2.5-pro**.
 
 ### 🗄️ `/data` (Owner: **Krish**)
 Act like a **Data Engineer**.
-- **Focus:** PostgreSQL, Alembic, ETL, query optimization.
-- **Rules:** Optimize indexes and joins; ensure schema consistency; no redundant tables.
+- **Focus:** PostgreSQL, schema introspection, Weaviate indexing.
+- **Rules:** Optimize indexes; ensure secure read-only connections to user databases; no redundant metadata.
 
 ### 📊 `/analytics` (Owner: **Kushank**)
 Act like a **Data Scientist / Analyst**.
@@ -94,8 +94,8 @@ Act like a **Senior Android Developer**.
 
 ## 🔐 Security Guidelines
 - **Sandboxing:** All LLM-generated Python code MUST run in a secure sandbox.
-- **Sanitization:** Sanitize all SQL queries before execution.
-- **Secrets:** NEVER expose API keys or database credentials in code. Use `.env`.
+- **Sanitization:** Sanitize all SQL queries; use READ-ONLY connections for analysis.
+- **Secrets:** NEVER expose API keys or database credentials in code. Use `.env`. (PGAdmin Pass: `@HillPatel07` noted for local dev).
 
 ## 📡 API Design Rules
 - Follow RESTful principles.
@@ -103,15 +103,16 @@ Act like a **Senior Android Developer**.
 - Mandatory input validation using Pydantic models.
 
 ## 🧪 Testing Expectations
-- **Unit Tests:** Mandatory for API endpoints, data pipelines, and query generation logic.
+- **Unit Tests:** Mandatory for API endpoints, introspection logic, and query generation.
 - **Integration Tests:** Required for cross-module flows (e.g., NL → SQL → Result).
 
 ## 🚀 LLM-Specific Rules
-- **Validation:** Always validate LLM outputs (SQL/Python) before execution.
+- **Validation:** Always validate LLM outputs (SQL/Python) before execution via a "Verification Agent".
 - **Fallbacks:** Implement fallback logic if query generation fails or returns invalid results.
-- **Context:** Use FAISS/Weaviate for RAG to provide relevant schema context to the LLM.
+- **Context:** Use **Weaviate** for RAG to provide relevant schema context to the LLM.
 
 ## ⚠️ What to Avoid
 - Monolithic code or threading state across unrelated layers.
 - Hardcoded values or "just-in-case" redundant logic.
 - Silent changes without technical rationale.
+

@@ -1,27 +1,26 @@
 # LLM_ARCHITECTURE: BizCopilot
 
-## 🏗️ The Multi-Stage Pipeline
+## 🏗️ The Multi-Stage Pipeline (Google ADK)
 
-### Stage 1: Context Enrichment (RAG)
-- **Task:** Retrieve relevant schema snippets.
-- **Prompt:** "Given the user's question about 'monthly revenue', which tables from the list [sales, customers, products] are relevant?"
-- **Output:** List of table/column metadata.
+### Stage 1: Context Enrichment (RAG via Weaviate)
+- **Task:** Retrieve high-precision schema snippets using semantic search.
+- **Agent:** **ADK Coordinator** queries **Weaviate**.
+- **Context:** Table descriptions, column types, and foreign key relationships.
 
-### Stage 2: Code/Query Generation
-- **Task:** Write the technical instruction.
-- **System Prompt:** Contains "You are a Senior PostgreSQL expert. Use CTEs for readability. Only use the provided schema."
+### Stage 2: SQL Architecture (gemini-2.5-pro)
+- **Task:** Generate production-grade PostgreSQL queries.
+- **System Prompt:** "You are a Senior PostgreSQL Expert. Use READ-ONLY syntax. Adhere strictly to the provided Weaviate-retrieved schema."
 
-### Stage 3: Verification Layer (The Critic)
-- **Task:** Audit the generated code.
-- **Checklist:**
-    - Does the SQL join on correct keys?
-    - Does the Python code use any forbidden libraries?
-    - Is the visualization logic compatible with the result set?
+### Stage 3: Verification (The Auditor)
+- **Task:** Audit the generated SQL for security and logic.
+- **Agent:** **Verification Agent** uses `gemini-2.5-pro` to check for:
+    - Destructive commands (DROP, DELETE, UPDATE).
+    - Efficient join logic and correct data types.
 
-### Stage 4: Synthesis
-- **Task:** Human-centric delivery.
-- **Tone:** Professional, concise, data-driven.
+### Stage 4: Synthesis & Visualization
+- **Task:** Transform raw data into business insights and JSON chart configs.
+- **LLM:** `gemini-2.5-pro`.
 
-## 🔄 State Management (LangGraph)
-- The graph maintains the "Conversation State."
-- If a user says "And what about the month before?", the graph injects the previous SQL result as context.
+## 🔄 Orchestration (Google ADK)
+- **Agent Engine:** Uses **Google ADK** for intent routing and sub-task coordination.
+- **Memory:** Context is maintained across turns to allow for follow-up questions (e.g., "Compare this to last year").
